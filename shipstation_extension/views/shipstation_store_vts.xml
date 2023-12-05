@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="ship_station_store_extend_form_view" model="ir.ui.view">
+            <field name="name">Ship Station Store  Extend</field>
+            <field name="model">shipstation.store.vts</field>
+            <field name="inherit_id" ref="shipstation_shipping_odoo_integration.view_shipstation_store_form_view_vts"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='pricelist_id']" position="after">
+                    <field name="user_id" />
+                    <field name="add_vat_line" />
+                    <field name="carrier_id" />
+                    <field name="partner_id" />
+                    <field name="create_multi_shipment" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_third_party_account_number,access_third_party_account_number,model_third_party_account_number,sales_team.group_sale_salesman,1,1,1,1
+access_access_third_party_account_number_manager,manager_ltl_shipengine_carrier_details,model_third_party_account_number,sales_team.group_sale_manager,1,1,1,1
+access_shipstation_multi_pack,access_shipstation_multi_pack,model_shipstation_multi_pack,,1,1,1,1

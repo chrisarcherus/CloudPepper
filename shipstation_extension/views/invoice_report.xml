@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="shipment_tracking_number_field" inherit_id="account.report_invoice_document">
+            <data>
+                <xpath expr="//div[@name='reference']" position="after">
+                  <div class="col-auto mw-100 mb-2" t-if="o.shipment_trc_number" name="shipment_trc_number">
+                      <strong>Tracking Number:</strong>
+                      <p class="m-0" t-field="o.shipment_trc_number"/>
+                  </div>
+              </xpath>
+            </data>
+
+        </template>
+    </data>
+</odoo>

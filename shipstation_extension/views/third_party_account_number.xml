@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="third_party_account_number_view_form" model="ir.ui.view">
+            <field name="name">third_party_account_number_view_form</field>
+            <field name="model">third.party.account.number</field>
+            <field name="arch" type="xml">
+                <form string="Third Party Account Number">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="account_number" />
+                                <field name="billing_country_id" />
+                                <field name="partner_id" invisible="1" />
+                                <field name="parent_id" invisible="1" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

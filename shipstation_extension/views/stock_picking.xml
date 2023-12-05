@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="third_party_account_form_view" model="ir.ui.view">
+            <field name="name">Third Party Account Ids</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='location_id']" position="after">
+                    <field name="parent_id" invisble="1"/>
+                    <field name="third_party_account_id" domain="[('partner_id', 'in', [partner_id, parent_id])]"/>
+                </xpath>
+                <xpath expr="//notebook/page[@name='operations']/field[@name='move_ids_without_package']"
+                       position='after'>
+                    <group string="Package Dimension"/>
+                    <field name="shipstation_multi_pac_ids">
+                        <tree editable="top">
+                            <field name="shipstation_height" required="1"/>
+                            <field name="shipstation_width" required="1"/>
+                            <field name="shipstation_length" required="1"/>
+                            <field name="shipstation_weight" required="1" />
+                            <field name="custom_tracking_number" readonly="1"/>
+                            <field name="shipstation_shipment_id" readonly="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
