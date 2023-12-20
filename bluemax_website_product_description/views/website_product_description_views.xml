@@ -1,0 +1,65 @@
+<odoo>
+    <template id="product_inherit" inherit_id="website_sale.product" name="Product" track="1">
+        <xpath expr="//div[@id='product_details']/h1[@itemprop='name']" position="before">
+            <span t-if="product.x_brand_name">
+                <strong>Brand Name: </strong>
+                <span t-field="product.x_brand_name" />
+                <br />
+            </span>
+            <span t-if="product.x_mfg_part_number">
+                <strong>Manufacturer Part Number: </strong>
+                <span t-field="product.x_mfg_part_number" />
+                <br />
+            </span>
+        </xpath>
+        <xpath expr="//section[@id='product_detail']" position="after">
+            <div style="border-top: 1px solid #CED4DA;">
+                <section t-attf-class="container py-4 oe_website_sale">
+                    <div class="row" t-if="product.specification_ids">
+                        <div class="col-lg-6">
+                            <h2>
+                                <strong>Specification</strong>
+                            </h2>
+                            <t t-foreach="product.specification_ids.sorted(key=lambda s:s.sequence)" t-as="specification">
+                                <div class="row" t-if="specification.value">
+                                    <div class="col-5">
+                                        <strong><span t-field="specification.name" /></strong>
+                                    </div>
+                                    <div class="col-7">
+                                        <span t-field="specification.value" />
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="col-lg-6" t-if="product.ecommerce_description != '&lt;p&gt;&lt;br&gt;&lt;/p&gt;'">
+                            <h2>
+                                <strong>Description</strong>
+                            </h2>
+                            <div itemprop="description" t-field="product.ecommerce_description" class="oe_structure oe_empty mt16" id="product_full_description" />
+                        </div>
+                    </div>
+                    <div class="row" t-else="">
+                        <t t-if="product.ecommerce_description != '&lt;p&gt;&lt;br&gt;&lt;/p&gt;'">
+                            <div class="col-lg-5">
+                            </div>
+                            <div class="col-lg-6">
+                                <h2>
+                                    <strong>Description</strong>
+                                </h2>
+                                <div itemprop="description" t-field="product.ecommerce_description" class="oe_structure oe_empty mt16" id="product_full_description" />
+                            </div>
+                            <div class="col-lg-1">
+                            </div>
+                        </t>
+                    </div>
+                    <div class="row mt8" t-if="product.ecommerce_disclaimer != '&lt;p&gt;&lt;br&gt;&lt;/p&gt;'">
+                        <h2>
+                            &#160;&#160;<strong>Disclaimer</strong>
+                        </h2>
+                        <div itemprop="description" t-field="product.ecommerce_disclaimer" class="col-lg-12" id="product_full_description" />
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>
