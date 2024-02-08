@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.website</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='website_info_settings']" position="after">
+                <block title="CharGPT Configurations" id="website_chatgpt_settings">
+                    <setting>
+                        <div class="content-group">
+                            <div class="row mt8">
+                                <label class="col-lg-3" string="CharGPT Tags" for="wr_chatgpt_tags_ids"/>
+                                <field name="wr_chatgpt_tags_ids" widget="many2many_tags"
+                                       title="This tags will be used to help search prompt with ChatGPT request"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

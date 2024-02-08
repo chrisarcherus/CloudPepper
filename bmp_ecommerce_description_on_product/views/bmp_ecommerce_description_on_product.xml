@@ -1,0 +1,16 @@
+<odoo>
+  <data>
+    <record id="bmp_ecommerce_description_on_product" model="ir.ui.view">
+      <field name="name">bmp_ecommerce_description_on_product</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_only_form_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//group[@name='sale']" position="after">
+          <group string="eCommerce Description" name="bmp_ecommerce_description_on_product">
+            <field colspan="2" name="description_ecommerce" nolabel="1" placeholder="This is the eCommerce Description for the product on the website."/>
+          </group>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
