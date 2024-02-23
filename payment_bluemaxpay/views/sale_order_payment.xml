@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sale_order_payment_form" model="ir.ui.view">
+            <field name="name">Payment</field>
+            <field name="model">sale.order.payment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group invisible="is_bluemaxpay_card_sale">
+                                <field name="partner_id" />
+                                <field name="is_card" />
+                                <field name="card_id" invisible="is_card" />
+                                <field name="save_card" invisible="not is_card" />
+                            </group>
+                            <group invisible="is_bluemaxpay_card_sale">
+                                <field name="payment_type" required="is_bluemaxpay_card_sale" />
+                                <field name="amount" widget="monetary" />
+                                <field name="sale_id" invisible="1" />
+                            </group>
+                            <group>
+                                <field name="is_bluemaxpay_card_sale" class="is-bluemaxpay-card-present" invisible="is_card" />
+                            </group>
+                            <group />
+                            <field name="pax_config_ids" mode='kanban' class="oe_background_greyssdfsdf" invisible="not is_bluemaxpay_card_sale">
+                                <kanban class="kanban_custom_bluemax">
+                                    <field name="id" />
+                                    <field name="name" />
+                                    <field name="amount_pax" />
+                                    <t t-name="kanban-box">
+                                        <div style="display: inline-block;margin-left: 0px;font-weight: bolder;margin-top: 20px !important;">
+                                            <t t-esc="record.name.value" />
+                                        </div>
+                                        <widget name="payment_process" string="Pay" highlight="1" class="payment_process" action="message_post" t-att-terminal_id="record.id.value or ''" t-att-terminal_name="record.name.value or ''" t-att-amount_pax="record.amount_pax.value or ''" />
+                                    </t>
+                                </kanban>
+                            </field>
+                            <div class="show_confirm_message" style="display:none">Your payment is Successful. Please click on the Button Below.</div>
+                        </group>
+                        <group id="address_sale_details" string="Credit Card Address Details" invisible="not is_card">
+                            <group>
+                                <field name="partner_id_child_ids" context="{'search_default_customer':1}" options='{"always_reload": True}' placeholder="Default Address" />
+                                <field name="customer_street" required="is_card" />
+                                <field name="customer_city" required="is_card" />
+                                <field name="save_address" required="is_card" />
+                            </group>
+                            <group>
+                                <field name="customer_state_id" required="is_card" />
+                                <field name="customer_zip" required="is_card" />
+                                <field name="customer_country_id" required="is_card" />
+                                <field name="save_address_name" required="save_address" invisible="not save_address" />
+                            </group>
+                        </group>
+                        <group id="card_sale_details" string="Card Details" invisible="not is_card">
+                            <group>
+                                <field name="card_type" widget="radio" options="{'horizontal': true}" />
+                                <field name="card_number" required="is_card" />
+                                <field name="name" required="is_card" />
+                                <field name="card_cvv" required="is_card" />
+                            </group>
+                            <group>
+                                <field name="card_expiry_month" required="is_card" />
+                                <field name="card_expiry_year" required="is_card" />
+                                <field name="token_name" invisible="not save_card" required="is_card or save_card" />
+                            </group>
+                        </group>
+                        <footer>
+                            <button string="Payment" id="action_create_payment_sale" name="create_payment" type="object" class="btn-primary" data-hotkey="q" />
+                            <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z" invisible="is_bluemaxpay_card_sale" />
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="sale_order_payment" model="ir.actions.act_window">
+            <field name="name">Payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order.payment</field>
+            <field name="view_mode">form</field>
+        </record>
+    </data>
+</odoo>
