@@ -1,0 +1,478 @@
+<templates>
+    <t t-name="SaleReportTemp">
+        <div class="">
+            <div class="">
+                <h1 style="padding:10px">
+                    Sales Inventory Report
+                </h1>
+            </div>
+            <div>
+                <div class="filter_view_tb"></div>
+            </div>
+            <br></br>
+            <div>
+                <div class="table_view_tb" style="right:20px;"></div>
+            </div>
+        </div>
+    </t>
+    <t t-name="InventorySaleTable">
+        <div>
+            <div class="table_main_view">
+                <table cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th colspan="mon_fld" style="text-align:left">No</th>
+                            <th colspan="5">Product</th>
+                            <th class="mon_fld">Internal Reference</th>
+                            <th class="mon_fld">Total Sold</th>
+                            <th class="mon_fld">On Hand</th>
+                            <th class="mon_fld">Total Sales</th>
+                            <th class="mon_fld">Total Cost</th>
+                            <th class="mon_fld">Margin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="none_value" t-value="_" />
+                        <t t-foreach="product_report_lines[0]" t-as="account">
+                            <t t-set="common_id" t-value="0" />
+                            <tr style="border: 1.5px solid black;" class="gl-line" data-bs-toggle="collapse" t-att-data-account-id="account['product_id']" t-attf-data-bs-target=".a{{account['product_id']}}">
+                                <td style="text-align:left;width:1.5%">
+                                    <t t-if="account['row'] == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account['row']" />
+                                    </t>
+                                </td>
+                                <td colspan="5" style="border: 0px solid black;">
+                                    <i class="fa fa-caret-down" role="img" aria-label="Unfolded" title="Unfolded" />
+                                    <span>
+                                        <t t-esc="account['product_name']" />
+                                    </span>
+                                <td style="text-align:right;">
+                                    <t t-if="account.internal_reference">
+                                        <t t-esc="account.internal_reference" />
+                                    </t>
+                                    <t t-else="">
+                                        <span>-</span>
+                                    </t>
+                                </td>
+                                <td style="text-align:right;">
+                                    <t t-if="account['total_qty_sold'] == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account['total_qty_sold']" />
+                                    </t>
+                                </td>
+                                <td style="text-align:right;">
+                                    <t t-if="account['product_on_hand'] == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account['product_on_hand']" />
+                                    </t>
+                                </td>
+                                <t t-if="currency[1] == 'before'">
+                                    <td style="text-align:right;">
+                                        <t t-if="account['direction_amount'] == 0">
+                                            <span>-</span>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="currency[0]" />
+                                            <t t-esc="account['direction_amount']" />
+                                        </t>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <t t-if="account['direction_cost'] == 0">
+                                            <span>-</span>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="currency[0]" />
+                                            <t t-esc="account['direction_cost']" />
+                                        </t>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td style="text-align:right;">
+                                        <t t-if="account['direction_amount'] == 0">
+                                            <span>-</span>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="account['direction_amount']" />
+                                            <t t-esc="currency[0]" />
+                                        </t>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <t t-if="account['direction_cost'] == 0">
+                                            <span>-</span>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-esc="account['direction_cost']" />
+                                            <t t-esc="currency[0]" />
+                                        </t>
+                                    </td>
+                                </t>
+                                <td t-if="account['margin_color'] == 'R'" style="text-align:right;background-color: #FF0000;">
+                                    <t t-if="account['sales_margin'] == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account['sales_margin']" />
+                                        %
+                                    </t>
+                                </td>
+                                <td t-if="account['margin_color'] == 'O'" style="text-align:right;background-color: #FFA500;">
+                                    <t t-if="account['sales_margin'] == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account['sales_margin']" />
+                                        %
+                                    </t>
+                                </td>
+                                <td t-if="account['margin_color'] == 'Y'" style="text-align:right;background-color: #FFFF00;">
+                                    <t t-if="account['sales_margin'] == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account['sales_margin']" />
+                                        %
+                                    </t>
+                                </td>
+                                <td t-if="account['margin_color'] == 'N'" style="text-align:right;">
+                                    <t t-if="account['sales_margin'] == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account['sales_margin']" />
+                                        %
+                                    </t>
+                                </td>
+                                </td>
+                            <tr t-attf-class="collapse a{{account['product_id']}}">
+                                <td colspan="14">
+                                    <ul>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tr>
+                        </t>
+                        <td colspan="6" style="" class="">
+                            <strong>Total</strong>
+                        </td>
+                        <td class="mon_fld" style="">
+                            <strong></strong>
+                        </td>
+                        <td class="mon_fld" style="">
+                            <strong></strong>
+                        </td>
+                        <td class="mon_fld" style="">
+                            <strong></strong>
+                        </td>
+                        <t t-if="currency[1] == 'before'">
+                            <td class="mon_fld" style="">
+                                <strong>
+                                    <t t-esc="currency[0]" />
+                                    <t t-esc="all_total['total_amount']" />
+                                </strong>
+                            </td>
+                            <td class="mon_fld" style="">
+                                <strong>
+                                    <t t-esc="currency[0]" />
+                                    <t t-esc="all_total['total_cost']" />
+                                </strong>
+                            </td>
+                        </t>
+                        <t t-else="">
+                            <td class="mon_fld" style="">
+                                <strong>
+                                    <t t-raw="Math.round(all_total['total_amount'] * Math.pow(10, 2)) / Math.pow(10, 2)" />
+                                    <t t-esc="currency[0]" />
+                                </strong>
+                            </td>
+                            <td class="mon_fld" style="">
+                                <strong>
+                                    <t t-raw="Math.round(all_total['total_cost'] * Math.pow(10, 2)) / Math.pow(10, 2)" />
+                                    <t t-esc="currency[0]" />
+                                </strong>
+                            </td>
+                        </t>
+                        <td style="text-align:right;">
+                            <t t-if="all_total['avg_margin'] == 0">
+                                <span>-</span>
+                            </t>
+                            <t t-else="">
+                                <t t-esc="all_total['avg_margin']" />
+                                %
+                            </t>
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </t>
+    <t t-name="SubSectionalInvoice">
+        <div class="gl-table-div">
+            <table class="table table-sm o_main_table" style="border: 0px solid black;display compact;">
+                <thead>
+                    <tr style="">
+                        <th>Entry Label</th>
+                        <th>Invoice Date</th>
+                        <th>QTY</th>
+                        <th>Price EA</th>
+                        <th>Cost EA</th>
+                        <th>Total Sale</th>
+                        <th>Total Cost</th>
+                        <th>GP (Price)</th>
+                        <th>GP (Percentage)</th>
+                        <th>Sales Person</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="account_data" t-as="account_line">
+                        <tr>
+                            <td>
+                                <t t-if="account_line.mov_id">
+                                    <div class="dropdown dropdown-toggle">
+                                        <a data-bs-toggle="dropdown" href="#">
+                                            <span class="caret"></span>
+                                            <span>
+                                                <t t-esc="account_line.move" />
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                                            <li>
+                                                <a class="view-account-move" tabindex="-1" href="#" t-att-data-move-id="account_line.mov_id">
+                                                    View Source move
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </t>
+                            </td>
+                            <td>
+                                <t t-esc="account_line.invoice_date" />
+                            </td>
+                            <td>
+                                <t t-esc="account_line.invoice_quantity" />
+                            </td>
+                            <t t-if="account_line.currency == 'before'">
+                                <td>
+                                    <t t-if="account_line.list_price == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.symbol" />
+                                        <t t-esc="account_line.list_price" />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="account_line.standard_price == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.symbol" />
+                                        <t t-esc="account_line.standard_price" />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="account_line.amount == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.symbol" />
+                                        <t t-esc="account_line.amount" />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="account_line.cost == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.symbol" />
+                                        <t t-esc="account_line.cost" />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="account_line.gross_profit == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.symbol" />
+                                        <t t-esc="account_line.gross_profit" />
+                                    </t>
+                                </td>
+                            </t>
+                            <t t-else="">
+                                <td>
+                                    <t t-if="account_line.list_price == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.list_price" />
+                                        <t t-esc="account_line.symbol" />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="account_line.standard_price == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.standard_price" />
+                                        <t t-esc="account_line.symbol" />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="account_line.amount == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.amount" />
+                                        <t t-esc="account_line.symbol" />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="account_line.cost == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.cost" />
+                                        <t t-esc="account_line.symbol" />
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="account_line.gross_profit == 0">
+                                        <span>-</span>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="account_line.gross_profit" />
+                                        <t t-esc="account_line.symbol" />
+                                    </t>
+                                </td>
+                            </t>
+                            <td>
+                                <t t-esc="account_line.gross_profit_margin" />
+                                %
+                            </td>
+                            <td>
+                                <t t-esc="account_line.sm_cm" />
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </t>
+    <t t-name="SalesReportFilterView">
+        <div class="row" style="margin-right: 10px; margin-left: 10px;">
+            <div class="sub_container_left row" style="width:70%;">
+                &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                <div class="report_print" style="width: 17%;">
+                    <button type="button" class="btn btn-primary" id="pdf" style="position: relative;height:30px;color:white;background-color: #00A0AD;border-color: #00A0AD; padding:3px;">
+                        Print (PDF)
+                    </button>
+                    <button type="button" class="btn btn-primary" id="xlsx" style="position: relative;height:30px;color:white;background-color: #00A0AD;border-color: #00A0AD; padding:3px;">
+                        Export (XLSX)
+                    </button>
+                </div>
+                &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+                <div class="margin_table" style="width: 28%;">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>Margin Legend</span>
+                                </th>
+                                <th style="text-align:right;background-color: #FF0000;">
+                                    <span>0 - 14.9 %</span>
+                                </th>
+                                <th style="text-align:right;background-color: #FFA500;">
+                                    <span>15 - 19.9 %</span>
+                                </th>
+                                <th style="text-align:right;background-color: #FFFF00;">
+                                    <span>20 - 24.9 %</span>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <div class="sub_container_right row" style="width:30%;height:3%;top:0px;position: relative;">
+                <div class="margin_table" style="width: 35%;">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>Start Date :</span>
+                                </th>
+                                <th>
+                                    <t t-esc="filter_data['date_from']" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <span>End Date :</span>
+                                </th>
+                                <th>
+                                    <t t-esc="filter_data.date_to" />
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                &amp;nbsp;&amp;nbsp;
+                <div class="time_range" style="width: 20%;">
+                    <a type="button" class="dropdown-toggle" data-bs-toggle="dropdown">
+                        <span class="fa fa-calendar" title="Dates" role="img" aria-label="Dates" />
+                        Date Range
+                    </a>
+                    <div class="dropdown-menu" role="menu">
+                        <div class="form-group">
+                            <label class="" for="date_from">Start Date :</label>
+                            <div class="input-group date" id="date_from" data-target-input="nearest">
+                                <input type="text" name="date_from" class="form-control datetimepicker-input" data-target="#date_from" t-att-name="prefix" />
+                                <div class="input-group-append" data-target="#date_from" data-bs-toggle="datetimepicker">
+                                    <span class="input-group-text">
+                                        <span class="fa fa-calendar" role="img" aria-label="Calendar" />
+                                    </span>
+                                </div>
+                            </div>
+                            <label class="" for="date_to">End Date :</label>
+                            <div class="input-group date" id="date_to" data-target-input="nearest">
+                                <input type="text" name="date_to" class="form-control datetimepicker-input" data-target="#date_to" t-att-name="prefix" />
+                                <div class="input-group-append" data-target="#date_to" data-bs-toggle="datetimepicker">
+                                    <span class="input-group-text">
+                                        <span class="fa fa-calendar" role="img" aria-label="Calendar" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                &amp;nbsp;&amp;nbsp;
+                <div class="product_filter" style="width: 28%;">
+                    <a type="button" class="dropdown-toggle" data-bs-toggle="dropdown">
+                        <span class="fa fa-users" />
+                        Internal Reference:
+                    </a>
+                    <select class="dropdown-menu products" name="states[]" multiple="multiple">
+                        <t t-foreach="filter_data.product_list" t-as="product">
+                            <option t-attf-value="{{product[0]}}">
+                                <t t-esc="product[1]" />
+                            </option>
+                        </t>
+                    </select>
+                    <span id="products_res" />
+                </div>
+                &amp;nbsp;&amp;nbsp;
+                <div style="width: 12%;">
+                    <button type="button" id="apply_filter" class="btn btn-primary" style="top:0px;height:30px;color:white;background-color: #00A0AD;border-color: #00A0AD;">
+                        Apply
+                    </button>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

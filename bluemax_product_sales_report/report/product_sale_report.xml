@@ -1,0 +1,131 @@
+<odoo>
+    <template id="bluemax_product_sales_report.product_sales">
+        <t t-call="web.html_container">
+            <t t-set="data_report_margin_top" t-value="12" />
+            <t t-set="data_report_header_spacing" t-value="9" />
+            <t t-set="data_report_dpi" t-value="110" />
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <div class="oe_structure" />
+                    <h3 style="text-align:centre;left:50%;">
+                        <span t-esc="Filters.get('company_name')" />
+                        : Sales Inventory Report
+                    </h3>
+                    <span t-if="Filters.get('date_from')">
+                        <strong>From :</strong>
+                        <t t-esc="Filters['date_from']" />
+                    </span>
+                    <span t-if="Filters.get('date_to')">
+                        <strong>To :</strong>
+                        <t t-esc="Filters['date_to']" />
+                    </span>
+                    <div>
+                        <div style="text-align:centre;left:50%;" class="row">
+                            <div class="col-2">
+                                <strong>Products:</strong>
+                                <t t-foreach="Filters['products']" t-as="pd">
+                                    <li>
+                                        <t t-esc="pd" />
+                                    </li>
+                                </t>
+                            </div>
+                        </div>
+                        <div style="text-align:centre;left:50%;" class="row">
+                        </div>
+                        <br />
+                        <table class="table table-sm table-reports" style="padding:5px;">
+                            <thead>
+                                <tr class="text-center">
+                                    <th style="text-align:left;">Entry Label</th>
+                                    <th style="text-align:left;">Invoice Date</th>
+                                    <th style="text-align:left;">GP ( Price )</th>
+                                    <th style="text-align:left;">Margin ( % )</th>
+                                    <th style="text-align:left;">Total Sold</th>
+                                    <th style="text-align:right;">Total Sales</th>
+                                    <th style="text-align:right;">Total Cost</th>
+                                    <th style="text-align:right;" />
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="account_data" t-as="account">
+                                    <tr style="font-weight: bold;">
+                                        <td colspan="3">
+                                            <span style="color: white;" t-esc="'..'" />
+                                            <span t-esc="account['product_name']" />
+                                        </td>
+                                        <td class="text-left">
+                                            <span t-esc="account['sales_margin']" />
+                                            %
+                                        </td>
+                                        <td class="text-left">
+                                            <span t-esc="account['total_qty_sold']" />
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="account['direction_amount']" t-options="{'widget': 'monetary', 'display_currency': env.company.currency_id}" />
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="account['direction_cost']" t-options="{'widget': 'monetary', 'display_currency': env.company.currency_id}" />
+                                        </td>
+                                        <td groups="base.group_multi_currency" />
+                                    </tr>
+                                    <tr t-foreach="account['child_lines']" t-as="line">
+                                        <td>
+                                            <span t-esc="line['move']" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['invoice_date']" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['gross_profit']" t-options="{'widget': 'monetary', 'display_currency': env.company.currency_id}" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['gross_profit_margin']" />
+                                            %
+                                        </td>
+                                        <td class="text-left">
+                                            <span t-esc="line['invoice_quantity']" />
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="line['amount']" t-options="{'widget': 'monetary', 'display_currency': env.company.currency_id}" />
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="line['cost']" t-options="{'widget': 'monetary', 'display_currency': env.company.currency_id}" />
+                                        </td>
+                                        <td groups="base.group_multi_currency" />
+                                    </tr>
+                                </t>
+                                <tr style="font-weight: bold;">
+                                    <td colspan="3">
+                                        <span style="color: white;" t-esc="'..'" />
+                                        <span>Total</span>
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="total['avg_margin']" />
+                                        %
+                                    </td>
+                                    <td class="text-left">
+                                        <span>-</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="total['total_amount']" />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="total['total_cost']" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br />
+                </div>
+            </t>
+        </t>
+    </template>
+    <record id="action_print_product_sales" model="ir.actions.report">
+        <field name="name">Sales Inventory</field>
+        <field name="model">account.product.sales</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bluemax_product_sales_report.product_sales</field>
+        <field name="report_file">bluemax_product_sales_report.product_sales</field>
+    </record>
+</odoo>

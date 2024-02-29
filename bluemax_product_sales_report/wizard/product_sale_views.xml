@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_product_sales_wizard" model="ir.ui.view">
+        <field name="name">account.product.sales.wizard.form</field>
+        <field name="model">account.product.sales.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Sales Order">
+                <p class="oe_grey">
+                    The report displed by given date.
+                </p>
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="target_move"/>
+                        <field name="company_id"/>
+                    </group>
+                </group>
+                <group string="Filter By Products?">
+                    <field name="product_ids" widget="many2many_tags" />
+                    <field name="default_code" />
+                </group>
+                <footer>
+                    <button name="create_sales_report" type="object" string="View Report" class="btn-primary" data-hotkey="q"/>
+                    <!-- <button name="create_invoices" type="object"
+                        id="create_invoice"
+                        string="Create Invoice"
+                        data-hotkey="w"/> -->
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_account_product_sales_wizard" model="ir.actions.act_window">
+        <field name="name">Products Sales Report</field>
+        <field name="res_model">account.product.sales.wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="product_sales_report_accounting" sequence="18"
+              name="Sales Reports" parent="account.menu_finance_reports"/>
+
+    <menuitem id="menu_report_ageing"  action="action_view_account_product_sales_wizard"
+          name="Sales Inventory Report" parent="product_sales_report_accounting"/>
+
+    <record id="view_account_product_sales_tree" model="ir.ui.view">
+        <field name="name">account.product.sales.tree</field>
+        <field name="model">account.product.sales</field>
+        <field name="arch" type="xml">
+            <tree string="Product Sales" delete="false">
+                <field name="product_id"/>
+                <field name="internal_reference"/>
+                <field name="location"/>
+                <field name="move_id"/>
+                <field name="customer" />
+                <field name="invoice_date"/>
+                <field name="invoice_quantity" sum="Invoice Quantity"/>
+                <!-- <field name="list_price" sum="Price EA"/>
+                <field name="standard_price" sum="Cost EA"/> -->
+                <field name="amount" sum="Total Sale"/>
+                <field name="cost" sum="Total Cost"/>
+                <field name="gross_profit" sum="GP (Price)"/>
+                <field name="gross_profit_margin" avg="GP (%)"/>
+                <field name="user_id"/>
+                <field name="company_id" optional="hide"/>
+                <field name="currency_id" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_account_product_sales_search" model="ir.ui.view">
+        <field name="name">account.product.sales.search.form</field>
+        <field name="model">account.product.sales</field>
+        <field name="arch" type="xml">
+           <search string="Tasks">
+                <field name="product_id"/>
+                <field name="internal_reference"/>
+                <field name="move_id"/>
+                <field name="user_id"/>
+                <field name="customer" />
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="product_id" context="{'group_by': 'product_id'}"/>
+                    <filter string="Location" name="location" context="{'group_by': 'location'}"/>
+                    <filter string="Move" name="move_id" context="{'group_by': 'move_id'}"/>
+                    <filter string="Invoice Date" name="invoice_date" context="{'group_by': 'invoice_date'}"/>
+                    <filter string="Salesperson" name="user_id" context="{'group_by': 'user_id'}"/>
+                    <filter string="Customer" name="customer" context="{'group_by': 'customer'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_view_account_product_sales" model="ir.actions.act_window">
+        <field name="name">Sales Inventory Report</field>
+        <field name="res_model">account.product.sales</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_account_product_sales_search"/>
+    </record>
+
+</odoo>
